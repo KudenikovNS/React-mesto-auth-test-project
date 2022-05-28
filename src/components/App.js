@@ -66,9 +66,7 @@ export function App() {
       .then((res) => {
         setCurrentUser(res);
       })
-      .catch((err) =>
-        console.log("Ошибка при получении данных пользователя", err)
-      );
+      .catch((err) => console.log(err));
   }, []);
 
   function handleDeleteClick(card) {
@@ -76,7 +74,7 @@ export function App() {
     api
       .deleteConfirmCard(card._id)
       .then((res) => setCards(cards.filter((c) => c._id !== card._id)))
-      .catch((err) => console.log("Ошибка при удалении карточки", err));
+      .catch((err) => console.log(err));
   }
 
   function handleCardLike(card) {
@@ -88,7 +86,7 @@ export function App() {
           state.map((c) => (c._id === card._id ? newCard : c))
         );
       })
-      .catch((err) => console.log("Ошибка в  лайках", err));
+      .catch((err) => console.log(err));
   }
 
   function closeAllPopups() {
@@ -108,9 +106,7 @@ export function App() {
         closeAllPopups();
         setEditProfileButtonText("Сохранить");
       })
-      .catch((err) =>
-        setEditProfileButtonText("Ошибка при сохранении данных пользователя")
-      );
+      .catch((err) => console.log(err));
   }
 
   function handleUpdateAvatar({ avatar }) {
@@ -122,7 +118,7 @@ export function App() {
         closeAllPopups();
         setEditAvatarButtonText("Сохранить");
       })
-      .catch((err) => setEditAvatarButtonText("Ошибка при обновлении аватара"));
+      .catch((err) => console.log(err));
   }
 
   function handleAddPlaceSubmit({ name, link }) {
@@ -134,7 +130,7 @@ export function App() {
         closeAllPopups();
         setAddCardButtonText("Создать");
       })
-      .catch((err) => setAddCardButtonText("Ошибка при добавлении карточек"));
+      .catch((err) => console.log(err));
   }
 
   React.useEffect(() => {
@@ -168,7 +164,7 @@ export function App() {
       .then((res) => {
         handleTooltipInfo({
           imgPath: registrationAccept,
-          text: "Вы успешно зарегестрированы",
+          text: "Вы успешно зарегистрировались!",
         });
         handleToolltipInfoOpen();
         history.push("/sign-in");
@@ -176,7 +172,7 @@ export function App() {
       .catch((err) => {
         handleTooltipInfo({
           imgPath: registrationReject,
-          text: "Что-то пошло не так",
+          text: "Что-то пошло не так! Попробуйте еще раз",
         });
         handleToolltipInfoOpen();
         console.log(err);
@@ -194,7 +190,7 @@ export function App() {
         setEmail(email);
         handleTooltipInfo({
           imgPath: registrationAccept,
-          text: "Вы успешно авторизированы",
+          text: "Вы успешно зарегистрировались!",
         });
         history.push("/");
         handleToolltipInfoOpen();
@@ -202,7 +198,7 @@ export function App() {
       .catch((err) => {
         handleTooltipInfo({
           imgPath: registrationReject,
-          text: "Что-то пошло не так",
+          text: "Что-то пошло не так! Попробуйте еще раз",
         });
         handleToolltipInfoOpen();
         console.log(err);

@@ -38,9 +38,12 @@ export function Register({ registration }) {
         />
         <button className="login__button-submit">Зарегестрироваться</button>
       </form>
-      <Link className="login__link" to="/sign-in">
-        Уже зарегестрированы? Войти
-      </Link>
+      <div className="login__register-container">
+        <p className="login__register-text">Уже зарегистрированы?</p>
+        <Link className="login__link" to="/sign-in">
+          Войти
+        </Link>
+      </div>
     </section>
   );
 }
