@@ -1,15 +1,20 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+export function AddPlacePopup({
+  isOpen,
+  onClose,
+  onAddPlace,
+  buttonText = "Создать",
+}) {
   const [name, setName] = React.useState("");
   const [link, setLink] = React.useState("");
 
-  const handleChangeName = (e) => setName(e.target.value);
-  const handleChangeLink = (e) => setLink(e.target.value);
+  const handleChangeName = (evt) => setName(evt.target.value);
+  const handleChangeLink = (evt) => setLink(evt.target.value);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(evt) {
+    evt.preventDefault();
     onAddPlace({ name, link });
   }
 
@@ -22,10 +27,10 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     <PopupWithForm
       title="Новое место"
       name="cardpopup"
-      buttonText="Создать"
       isOpen={isOpen}
       onClose={onClose}
       handleSubmit={handleSubmit}
+      buttonText={buttonText}
     >
       <input
         type="text"

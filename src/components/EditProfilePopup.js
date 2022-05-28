@@ -2,7 +2,12 @@ import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
-export function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+export function EditProfilePopup({
+  isOpen,
+  onClose,
+  onUpdateUser,
+  buttonText,
+}) {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
 
@@ -28,7 +33,7 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     <PopupWithForm
       title="Редактировать профиль"
       name="profile"
-      buttonText="Сохранить"
+      buttonText={buttonText}
       isOpen={isOpen}
       onClose={onClose}
       handleSubmit={handleSubmit}

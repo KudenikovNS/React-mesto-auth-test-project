@@ -2,7 +2,9 @@ import React from "react";
 
 export function InfoTooltip({ isOpen, onClose, message }) {
   return (
-    <div className={`popup popup_type_tooltip ${isOpen ? "popup_opened" : ""}`}>
+    <section
+      className={`popup popup_type_tooltip ${isOpen ? "popup_opened" : ""}`}
+    >
       <div className="popup__container">
         <img
           src={message.imgPath}
@@ -16,6 +18,6 @@ export function InfoTooltip({ isOpen, onClose, message }) {
           onClick={onClose}
         />
       </div>
-    </div>
+    </section>
   );
 }

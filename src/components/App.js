@@ -27,25 +27,12 @@ import { api } from "../utils/api";
 import * as auth from "../utils/auth";
 
 export function App() {
-  const [
-    isEditProfilePopupOpen,
-    setEditProfilePopupOpen /* setIsEditProfilePopupOpen */,
-  ] = React.useState(false);
-
-  const [
-    isAddPlacePopupOpen,
-    setAddPlacePopupOpen /* setIsAddPlacePopupOpen */,
-  ] = React.useState(false);
-
-  const [
-    isEditAvatarPopupOpen,
-    setEditAvatarPopupOpen /* setIsEditAvatarPopupOpen */,
-  ] = React.useState(false);
-
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
+    React.useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCards] = React.useState({ isOpen: false });
-
   const [currentUser, setCurrentUser] = React.useState({});
-
   const [cards, setCards] = React.useState([]);
 
   const [editProfileButtonText, setEditProfileButtonText] =
@@ -69,32 +56,20 @@ export function App() {
   React.useEffect(() => {
     api
       .getInitialCards()
-      .then((cards /* data */) => setCards(cards /* data */))
+      .then((cards) => setCards(cards))
       .catch((err) => console.log(err));
   }, []);
 
   React.useEffect(() => {
     api
       .getUserInfo()
-      .then((res /* data */) => {
-        setCurrentUser(res /* data */);
+      .then((res) => {
+        setCurrentUser(res);
       })
       .catch((err) =>
         console.log("Ошибка при получении данных пользователя", err)
       );
   }, []);
-
-  /*   function handleDeleteClick /* handleCardDelete */ /* (card) { */
-  /*     api
-      .deleteConfirmCard(card._id)
-      .then(() => {
-        const newCards = cards.filter((elem) => elem !== card);
-        setCards(newCards);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } */
 
   function handleDeleteClick(card) {
     if (card.owner._id !== currentUser._id) return;
@@ -116,22 +91,6 @@ export function App() {
       .catch((err) => console.log("Ошибка в  лайках", err));
   }
 
-  /*   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((cards) =>
-          cards.map((currentCard) =>
-            currentCard._id === card._id ? newCard : currentCard
-          )
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } */
-
   function closeAllPopups() {
     setEditProfilePopupOpen(false);
     setEditAvatarPopupOpen(false);
@@ -141,39 +100,41 @@ export function App() {
   }
 
   function handleUpdateUser({ name, about }) {
+    setEditProfileButtonText("Сохраняю...");
     api
       .editProfile(name, about)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
+        setEditProfileButtonText("Сохранить");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) =>
+        setEditProfileButtonText("Ошибка при сохранении данных пользователя")
+      );
   }
 
   function handleUpdateAvatar({ avatar }) {
+    setEditAvatarButtonText("Сохраняю...");
     api
       .updateAvatar(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
+        setEditAvatarButtonText("Сохранить");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => setEditAvatarButtonText("Ошибка при обновлении аватара"));
   }
 
   function handleAddPlaceSubmit({ name, link }) {
+    setAddCardButtonText("Создаю...");
     api
       .addCard(name, link)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
+        setAddCardButtonText("Создать");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => setAddCardButtonText("Ошибка при добавлении карточек"));
   }
 
   React.useEffect(() => {
@@ -241,10 +202,9 @@ export function App() {
       .catch((err) => {
         handleTooltipInfo({
           imgPath: registrationReject,
-          text: "Что - то пошло не так",
+          text: "Что-то пошло не так",
         });
         handleToolltipInfoOpen();
-
         console.log(err);
       });
   }
@@ -291,16 +251,19 @@ export function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            buttonText={editProfileButtonText}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
+            buttonText={editAvatarButtonText}
           />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlaceSubmit}
+            buttonText={addCardButtonText}
           />
           <PopupWithForm
             title="Вы уверены?"
