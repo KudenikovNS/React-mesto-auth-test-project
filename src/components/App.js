@@ -104,9 +104,9 @@ export function App() {
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
-        setEditProfileButtonText("Сохранить");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setEditProfileButtonText("Сохранить"));
   }
 
   function handleUpdateAvatar({ avatar }) {
@@ -116,9 +116,9 @@ export function App() {
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
-        setEditAvatarButtonText("Сохранить");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setEditAvatarButtonText("Сохранить"));
   }
 
   function handleAddPlaceSubmit({ name, link }) {
@@ -128,9 +128,9 @@ export function App() {
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
-        setAddCardButtonText("Создать");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setAddCardButtonText("Создать"));
   }
 
   React.useEffect(() => {
