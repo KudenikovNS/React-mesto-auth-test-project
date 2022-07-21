@@ -1,29 +1,32 @@
-export default function PopupWithForm({ buttonText = "Сохранить", ...props }) {
-  return (
-    <section
-      className={`popup popup_type_${props.name} && ${
-        props.isOpen && "popup_opened"
-      }`}
-    >
-      <div className="popup__container">
-        <button
-          className="popup__button-close"
-          type="button"
-          onClick={props.onClose}
-        />
-        <h2 className="popup__title">{props.title}</h2>
-        <form
-          className={`popup__form popup__form_${props.name}`}
-          action="#"
-          name={`${props.name}`}
-          onSubmit={props.handleSubmit}
-        >
-          {props.children}
-          <button className="popup__button-save" type="submit">
-            {buttonText}
-          </button>
-        </form>
-      </div>
-    </section>
-  );
+import React from 'react';
+
+function PopupWithForm({ title, name, children, isOpen, onClose, onSubmit, isFormValid, buttonText }) {
+
+	function handleMouseDown(evt) {
+		if (evt.target === evt.currentTarget) {
+			onClose();
+		}
+	};
+
+	return (
+		<div className={`popup popup_type_${name} ${isOpen && 'popup_opened'}`} onMouseDown={handleMouseDown}>
+			<div className="popup__container">
+				<h2 className="popup__title">{title}</h2>
+				<form className="form" name={name} onSubmit={onSubmit} noValidate>
+					{children}
+					<button 
+						className={`btn popup__btn-save ${isFormValid ? '' : 'popup__btn-save_disabled'}`}
+						type="submit"
+						disabled={!isFormValid}
+					>
+						{buttonText}
+					</button>	
+				</form>
+				<button className="popup__btn-close" type="button" aria-label="Закрыть" onClick={onClose}></button>
+			</div>
+		</div>
+	);
 }
+
+export default PopupWithForm;
+

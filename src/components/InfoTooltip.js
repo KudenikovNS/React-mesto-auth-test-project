@@ -1,23 +1,43 @@
-import React from "react";
+import { useState, useEffect } from 'react';
+import successImage from '../images/success.svg';
+import errorImage from '../images/error.svg';
 
-export function InfoTooltip({ isOpen, onClose, message }) {
-  return (
-    <section
-      className={`popup popup_type_tooltip ${isOpen ? "popup_opened" : ""}`}
-    >
-      <div className="popup__container">
-        <img
-          src={message.imgPath}
-          alt="Подтверждение"
-          className="popup__tooltip-img"
-        />
-        <p className="popup__tooltip-description">{message.text}</p>
-        <button
-          type="button"
-          className="popup__button-close"
-          onClick={onClose}
-        />
-      </div>
-    </section>
-  );
+function InfoTooltip({ isOpen, onClose, success }) {
+
+	const [message, setMessage] = useState('');
+
+	function handleMouseDown(evt) {
+		if (evt.target === evt.currentTarget) {
+			onClose();
+		}
+	};
+
+	useEffect(() => {
+		if (success) {
+			setMessage('Вы успешно зарегистрировались!');
+		} else {
+			setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+		}
+	}, [success]);
+
+	return (
+		<div className={`popup registration-popup ${isOpen && 'popup_opened'}`} onMouseDown={handleMouseDown}>
+			<div className="popup__container">
+				<button
+					onClick={onClose}
+					className="popup__btn-close"
+					type="button"
+					aria-label="Закрыть"
+				/>
+				<img
+					className="registration-image"
+					src={success ? successImage : errorImage}
+					alt={success ? 'Успех' : 'Неудача'}
+				/>
+				<h2 className="popup__title popup__title_centered">{message}</h2>
+			</div>
+		</div>
+	);
 }
+
+export default InfoTooltip;

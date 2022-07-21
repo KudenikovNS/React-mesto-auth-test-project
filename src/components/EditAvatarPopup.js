@@ -1,43 +1,64 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
+import { useRef, useState, useEffect } from 'react';
+import PopupWithForm  from './PopupWithForm';
 
-export function EditAvatarPopup({
-  isOpen,
-  onClose,
-  onUpdateAvatar,
-  buttonText,
-}) {
-  const avatarRef = React.useRef();
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, loading }) {
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    onUpdateAvatar({
-      avatar: avatarRef.current.value,
-    });
-  }
+	const link = useRef();
 
-  React.useEffect(() => {
-    avatarRef.current.value = "";
-  }, [isOpen]);
+	const [values, setValues] = useState({
+		message: '',
+		isValid: false,
+	});
 
-  return (
-    <PopupWithForm
-      title="Обновить Аватар"
-      name="avatarpopup"
-      buttonText={buttonText}
-      isOpen={isOpen}
-      onClose={onClose}
-      handleSubmit={handleSubmit}
-    >
-      <input
-        className="popup__field popup__field_avatar_imageUrl"
-        name="avatar"
-        type="url"
-        id="form-avatar"
-        placeholder="Ссылка на аватарку"
-        ref={avatarRef}
-      />
-      <span className="form-avatar-error" id="form-avatar-error"></span>
-    </PopupWithForm>
-  );
-}
+	useEffect(() => {
+		checkAvatarValidation(link.current);
+		link.current.value = '';
+		setValues((values) => ({
+			...values,
+			message: ''
+		}))
+	}, [isOpen]);
+
+	const checkAvatarValidation = (link) => {
+		setValues((values) => ({
+			...values,
+			message: link.validationMessage,
+			isValid: link.validity.valid
+		}));
+	}
+
+	function handleSubmit(evt) {
+		evt.preventDefault();
+
+		onUpdateAvatar({
+			avatar: link.current.value,
+		});
+	}
+	
+	return (
+		<PopupWithForm
+			title='Обновить аватар'
+			name='avatar'
+			isOpen={isOpen}
+			onClose={onClose}
+			onSubmit={handleSubmit}
+			isFormValid={values.isValid}
+			buttonText={loading ? 'Сохранение...' : 'Сохранить'}
+			>
+			<label className="form__label">
+				<input
+					className="form__input"
+					id="avatar-input"
+					type="url"
+					name="avatar"
+					placeholder="Ссылка на картинку"
+					ref={link}
+					onChange={() => checkAvatarValidation(link.current)}
+					required/>
+				<span className={`form__input-error ${values.isValid ? '' : 'form__input-error_active'}`}>{values.message}</span>
+			</label>
+		</PopupWithForm>
+	)
+};
+
+export default EditAvatarPopup;
