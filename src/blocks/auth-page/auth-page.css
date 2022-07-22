@@ -1,9 +1,0 @@
-.auth-page {
-	max-width: 358px;
-	max-height: 460px;
-	margin: 0 auto;
-	margin-bottom: 65px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
